@@ -1,7 +1,13 @@
+import { useCreateMyCanteen, useGetMyCanteen } from "@/api/MyCanteenApi";
 import CanteenProfileForm from "@/forms/canteen-profile-form/CanteenProfileForm";
 
   const CanteenProfilePage = () => {
-   return <CanteenProfileForm/>;
+    const {createCanteen,isLoading}=useCreateMyCanteen();
+
+    const {Canteen}=useGetMyCanteen();
+   return <CanteenProfileForm 
+   canteen={Canteen}
+   onSave={createCanteen} isLoading={isLoading}/>;
   };
   
    

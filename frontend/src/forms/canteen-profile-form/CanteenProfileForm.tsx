@@ -10,6 +10,7 @@ import { Separator } from "@radix-ui/react-separator";
 import CuisinesSection from "./CuisinesSection";
 import MenuSection from "./MenuSection";
 import ImageSection from "./ImageSection";
+import { useEffect } from "react";
 
 const formSchema = z
   .object({
@@ -49,6 +50,32 @@ const CanteenProfileForm = ({ onSave, isLoading, canteen }: Props) => {
       menuItems: [{ name: "", price: 0 }],
     },
   });
+
+  useEffect(() => {
+    if(!canteen){
+      return;
+    }
+
+    const deliveryPriceFormatted=parseInt(
+      (canteen.deliveryPrice/100).toFixed(2)
+    );
+      const menuItemsFormatted=canteen.menuItems.map((item)=>({
+        ...item,
+        price:parseInt((item.price/100).toFixed(2)),
+      }))
+
+      const updatedCanteen={
+        ...canteen,
+        deliveryPrice:deliveryPriceFormatted,
+        menuItems:menuItemsFormatted,
+      }
+
+      form.reset(updatedCanteen);
+
+
+  }, [form,canteen]);
+
+
 
   const onSubmit = (formDataJson: CanteenFormData) => {
     const formData = new FormData();

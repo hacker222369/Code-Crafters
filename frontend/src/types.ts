@@ -13,6 +13,7 @@ export type MenuItem = {
   };
 
 export type Canteen = {
+    deliveryPrice: number;
     _id: string;
     user: string;
     canteenName: string;

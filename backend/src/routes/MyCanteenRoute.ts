@@ -15,6 +15,10 @@ const upload = multer({
 });
 
 
+
+router.get("/",jwtCheck,jwtParse,MyCanteenController.getMyCanteen)
+
+
 router.post(
   "/",
   upload.single("imageFile"),
@@ -23,6 +27,16 @@ router.post(
   validateMyCanteenRequest,
   MyCanteenController.createMyCanteen
 );
+
+router.put("/",
+
+upload.single("imageFile"),
+jwtCheck,
+jwtParse,
+MyCanteenController.updateMyCanteen
+)
+
+
 
 export default router;
 
