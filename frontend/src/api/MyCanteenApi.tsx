@@ -1,3 +1,4 @@
+import CanteenProfileForm from "@/forms/canteen-profile-form/CanteenProfileForm";
 import { Canteen } from "@/types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery } from "react-query";
@@ -72,3 +73,45 @@ export const useCreateMyCanteen = () => {
 
   return { createCanteen, isLoading };
 };
+
+export const useUpdateCanteen= () => {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const updateCanteenRequest = async (
+    canteenFormData: FormData
+  ): Promise<Canteen> => {
+    const accessToken = await getAccessTokenSilently();
+
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: canteenFormData,
+    });
+
+    if (!response) {
+      throw new Error("Failed to update canteen");
+    }
+
+    return response.json();
+  };
+
+  const {
+    mutate: updateCanteen,
+    isLoading,
+    error,
+    isSuccess,
+  } = useMutation(updateCanteenRequest);
+
+  if (isSuccess) {
+    toast.success("Canteen Updated");
+  }
+
+  if (error) {
+    toast.error("Unable to update restaurant");
+  }
+
+  return { updateCanteen, isLoading };
+};
+
